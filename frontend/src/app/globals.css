@@ -1,0 +1,85 @@
+@import "tailwindcss";
+@config "../../tailwind.config.ts";
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  :root {
+    /* Brand Colors - Garden Design Theme */
+    --background: 40 40% 95%; /* #F7F4ED - warm cream */
+    --foreground: 130 60% 16%; /* #104018 - deep forest green */
+
+    --card: 40 40% 95%;
+    --card-foreground: 130 60% 16%;
+
+    --popover: 40 40% 95%;
+    --popover-foreground: 130 60% 16%;
+
+    --primary: 130 60% 16%; /* #104018 - forest green */
+    --primary-foreground: 40 40% 95%;
+
+    --secondary: 28 64% 21%; /* #5A3113 - rich brown */
+    --secondary-foreground: 40 40% 95%;
+
+    --muted: 40 30% 90%;
+    --muted-foreground: 28 64% 21%;
+
+    --accent: 42 100% 53%; /* #FFB20F - vibrant gold */
+    --accent-foreground: 130 60% 16%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 40 40% 95%;
+
+    --border: 40 25% 85%;
+    --input: 40 25% 90%;
+    --ring: 42 100% 53%;
+
+    --radius: 0.5rem;
+
+    /* Custom Design Tokens */
+    --card-shadow: 0 2px 8px rgba(90, 49, 19, 0.08);
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .dark {
+    --background: 130 60% 8%;
+    --foreground: 40 40% 95%;
+
+    --card: 130 50% 12%;
+    --card-foreground: 40 40% 95%;
+
+    --popover: 130 50% 12%;
+    --popover-foreground: 40 40% 95%;
+
+    --primary: 42 100% 53%;
+    --primary-foreground: 130 60% 16%;
+
+    --secondary: 28 64% 21%;
+    --secondary-foreground: 40 40% 95%;
+
+    --muted: 130 40% 20%;
+    --muted-foreground: 40 30% 70%;
+
+    --accent: 42 100% 53%;
+    --accent-foreground: 130 60% 16%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 40 40% 95%;
+
+    --border: 130 40% 25%;
+    --input: 130 40% 25%;
+    --ring: 42 100% 53%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+}
