@@ -10,7 +10,7 @@ interface BreadcrumbItem {
 interface PageBannerProps {
   title: string;
   breadcrumbs: BreadcrumbItem[];
-  backgroundImage: StaticImageData;
+  backgroundImage?: StaticImageData;
 }
 
 export const PageBanner = ({ title, breadcrumbs, backgroundImage }: PageBannerProps) => {
@@ -19,7 +19,7 @@ export const PageBanner = ({ title, breadcrumbs, backgroundImage }: PageBannerPr
       {/* Background Image */}
       <div 
         className="absolute inset-0 bg-cover bg-center"
-        style={{ backgroundImage: `url(${backgroundImage.src})` }}
+        style={{ backgroundImage: `url(${backgroundImage?.src ?? ""})` }}
       >
         <div className="absolute inset-0 bg-black/40" />
       </div>

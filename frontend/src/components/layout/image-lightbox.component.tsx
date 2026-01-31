@@ -1,10 +1,11 @@
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { ChevronLeft, ChevronRight, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import Image, { StaticImageData } from "next/image";
+import { StrapiImage } from "../custom/strapi-image.component";
+import { Image as ImageType } from "@/types/image.types";
 
 interface ImageLightboxProps {
-  images: StaticImageData[];
+  images: ImageType[];
   currentIndex: number;
   isOpen: boolean;
   onClose: () => void;
@@ -46,9 +47,12 @@ export const ImageLightbox = ({
           )}
 
           {/* Image */}
-          <Image
-            src={images[currentIndex]}
-            alt={`Gallery image ${currentIndex + 1}`}
+          <StrapiImage
+            src={images[currentIndex]?.url ?? ""}
+            alt={images[currentIndex]?.alternativeText ?? ""}
+            width={images[currentIndex]?.width ?? 0}
+            height={images[currentIndex]?.height ?? 0}
+            priority={true}
             className="max-w-full max-h-full object-contain"
           />
 

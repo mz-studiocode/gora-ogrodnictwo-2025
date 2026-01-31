@@ -1,18 +1,16 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Checkbox } from "@/components/ui/checkbox";
-import { useState } from "react";
 import { toast } from "@/hooks/use-toast";
-import grassPhoto from "@/assets/images/contact-grass.jpg";
-import truckPhoto from "@/assets/images/contact-truck.jpg";
-import treePhoto from "@/assets/images/contact-tree.jpg";
-import Image from "next/image";
+import { HOME_PAGE_COMPONENTS, HomePageData } from "@/types/home-page.types";
+import { useMemo, useState } from "react";
+import { StrapiImage } from "../custom/strapi-image.component";
 
-export const ContactForm = () => {
+export const ContactForm = ({ data }: { data: HomePageData }) => {
   const [formData, setFormData] = useState({
     fullName: "",
     phone: "",
@@ -22,17 +20,13 @@ export const ContactForm = () => {
     consent: false,
   });
 
-  const serviceOptions = [
-    "Wycinka drzew",
-    "Mielenie gałęzi rębakijem",
-    "Frezowanie pnia drzewa",
-    "Koszenie trawy",
-    "Zakładanie trawnika",
-    "Nawadnianie automatyczne",
-    "Zakładanie ogrodu",
-    "Pielęgnacja roślin",
-    "Inne",
-  ];
+  const contactSection = useMemo(() => {
+    return data?.blocks?.find((block) => block.__component === HOME_PAGE_COMPONENTS.ContactSection) ?? null;
+  }, [data]);
+
+  const serviceOptions = useMemo(() => {
+    return contactSection?.services.map((service) => service.name) ?? [];
+  }, [contactSection]);
 
   const handleServiceToggle = (service: string) => {
     setFormData((prev) => ({
@@ -75,11 +69,17 @@ export const ContactForm = () => {
     });
   };
 
+  const filteredGallery = useMemo(() => {
+    return contactSection?.gallery.filter((_image, index) => index !== 1) ?? [];
+  }, [contactSection]);
+
+  if (!contactSection) return null;
+
   return (
     <section className="py-16 md:py-24">
       <div className="container mx-auto px-4">
         <h2 className="text-4xl md:text-5xl font-semibold text-foreground mb-12">
-          Skontaktuj się z nami
+          {contactSection.title}
         </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
@@ -87,23 +87,27 @@ export const ContactForm = () => {
           <div className="flex flex-col md:flex-row gap-4 h-full order-1 md:col-span-2 lg:col-span-1 lg:order-2">
             {/* Left column - Two smaller photos stacked */}
             <div className="flex flex-col gap-4 w-full md:flex-1 lg:w-[320px]">
-              <Image 
-                src={grassPhoto} 
-                alt="Professional garden service team" 
-                className="w-full md:h-1/2 h-64 object-cover rounded-lg"
-              />
-              <Image 
-                src={truckPhoto} 
-                alt="Garden service truck" 
-                className="w-full md:h-1/2 h-64 object-cover rounded-lg"
-              />
+              {filteredGallery.map((image) => (
+                <StrapiImage 
+                  key={image.id}
+                  src={image.url}
+                  alt={image.alternativeText ?? "Professional garden service team"} 
+                  width={image.width}
+                  height={image.height}
+                  className="w-full md:h-1/2 h-64 object-cover rounded-lg"
+                  priority={true}
+                />
+              ))}
             </div>
             {/* Right column - One tall photo */}
             <div className="w-full md:flex-1 lg:w-[320px]">
-              <Image 
-                src={treePhoto} 
+              <StrapiImage 
+                src={contactSection.gallery[1].url} 
                 alt="Professional gardener with service truck" 
+                width={contactSection.gallery[1].width}
+                height={contactSection.gallery[1].height}
                 className="w-full h-64 md:h-full object-cover rounded-lg"
+                priority={true}
               />
             </div>
           </div>
@@ -156,6 +160,7 @@ export const ContactForm = () => {
             </div>
 
             {/* Services in 2 columns */}
+            {contactSection.isServicesCheckboxEnabled && (
             <div className="space-y-5">
               <Label className="block">
                 Czym jesteś zainteresowany? <span className="text-destructive">*</span>
@@ -176,8 +181,9 @@ export const ContactForm = () => {
                     </label>
                   </div>
                 ))}
+                </div>
               </div>
-            </div>
+            )}
 
             {/* Message */}
             <div className="space-y-2">

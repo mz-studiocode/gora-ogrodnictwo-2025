@@ -1,8 +1,11 @@
 import { PageBanner } from "@/components/layout/page-baner.component";
 import { ContactForm } from "@/components/contact-form/contact-form.component";
 import grassPhoto from "@/assets/images/contact-grass.jpg";
+import { getHomePage } from "@/services/get-home-page";
 
-const Contact = () => {
+const Contact = async () => {
+  const data = await getHomePage()
+  const homePageData = data.data
   return (
     <div className="min-h-screen flex flex-col">
       <main className="flex-1">
@@ -14,7 +17,7 @@ const Contact = () => {
           ]}
           backgroundImage={grassPhoto}
         />
-        <ContactForm />
+        <ContactForm data={homePageData} />
       </main>
     </div>
   );
