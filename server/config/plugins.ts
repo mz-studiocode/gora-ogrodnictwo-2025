@@ -1,10 +1,24 @@
-export default () => {
-    return {
-      "protected-populate": {
-        enabled: true,
-        config: {
-          ["auto-populate"]: true,
+export default ({ env }) => {
+  return {
+    "protected-populate": {
+      enabled: true,
+      config: {
+        ["auto-populate"]: true,
+      },
+    },
+    upload: {
+      config: {
+        provider: 'cloudinary',
+        providerOptions: {
+          cloud_name: env('CLOUDINARY_NAME'),
+          api_key: env('CLOUDINARY_KEY'),
+          api_secret: env('CLOUDINARY_SECRET'),
+        },
+        actionOptions: {
+          upload: {},
+          delete: {},
         },
       },
-    };
+    },
   };
+};
