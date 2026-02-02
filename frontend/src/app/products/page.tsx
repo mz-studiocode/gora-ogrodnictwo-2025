@@ -1,21 +1,47 @@
 "use client"
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { PageBanner } from "@/components/layout/page-baner.component";
 import { Card, CardContent } from "@/components/ui/card";
-import { products, productCategories, type ProductCategory } from "@/data/products.mock";
 import { Badge } from "@/components/ui/badge";
 import heroGarden from "@/assets/images/hero-garden.jpeg";
 import Link from "next/link";
-import Image from "next/image";
+import { Product, ProductCategory } from "@/types/product.types";
+import { StrapiImage } from "@/components/custom/strapi-image.component";
+import { removePolishCharacters } from "@/utils/removePolishCharacters";
 
 const ProductCatalog = () => {
-  const [selectedCategory, setSelectedCategory] = useState<ProductCategory | "All">("All");
+  const [selectedCategory, setSelectedCategory] = useState<ProductCategory | null>(null);
+  const [categories, setCategories] = useState<ProductCategory[]>([]);
+  const [products, setProducts] = useState<Product[]>([]);
 
-  const filteredProducts = selectedCategory === "All"
+    useEffect(() => {
+      const fetchCategories = async () => {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_STRAPI_URL}/api/product-categories`);
+        const data = await response.json();
+  
+        const categoriesData: ProductCategory[] = data.data;
+        
+        setCategories(categoriesData);
+      };
+      fetchCategories();
+    }, []);
+
+    useEffect(() => {
+      const fetchProducts = async () => {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_STRAPI_URL}/api/strore-products`);
+        const data = await response.json();
+
+        const productsData: Product[] = data.data;
+        setProducts(productsData);
+      };
+      fetchProducts();
+    }, []);
+
+    const filteredProducts = selectedCategory === null
     ? products
-    : products.filter(product => product.category === selectedCategory);
-
+    : products?.filter(product => product.category?.id === selectedCategory?.id);
+    
   return (
     <div className="min-h-screen flex flex-col">
       <main className="flex-1">
@@ -37,18 +63,18 @@ const ProductCatalog = () => {
                   <h3 className="text-lg font-semibold text-foreground mb-4">Kategorie</h3>
                   <nav className="space-y-2">
                     <button
-                      onClick={() => setSelectedCategory("All")}
+                      onClick={() => setSelectedCategory(null)}
                       className={`w-full text-left px-4 py-2 rounded-lg transition-colors ${
-                        selectedCategory === "All"
+                        selectedCategory === null
                           ? "bg-accent text-accent-foreground font-medium"
                           : "text-foreground/70 hover:bg-muted hover:text-foreground"
                       }`}
                     >
                       Wszystkie produkty
                     </button>
-                    {productCategories.map((category) => (
+                    {categories.map((category) => (
                       <button
-                        key={category}
+                        key={category.id}
                         onClick={() => setSelectedCategory(category)}
                         className={`w-full text-left px-4 py-2 rounded-lg transition-colors ${
                           selectedCategory === category
@@ -56,7 +82,7 @@ const ProductCatalog = () => {
                             : "text-foreground/70 hover:bg-muted hover:text-foreground"
                         }`}
                       >
-                        {category}
+                        {category.name}
                       </button>
                     ))}
                   </nav>
@@ -65,19 +91,24 @@ const ProductCatalog = () => {
 
               {/* Products Grid */}
               <div className="flex-1">
-                {filteredProducts.length > 0 ? (
+                {filteredProducts && filteredProducts.length > 0 ? (
                   <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                    {filteredProducts.map((product) => (
-                      <Link
+                    {filteredProducts.map((product) => {
+                      const slug = removePolishCharacters(product.name);
+                      return (
+                        <Link
                         key={product.id}
-                        href={`/products/${product.slug}`}
+                        href={`/products/${slug}?id=${product.documentId}`}
                       >
                         <Card className="group overflow-hidden border-border hover:shadow-lg transition-all duration-300 cursor-pointer h-full">
                           <div className="aspect-[4/3] overflow-hidden">
-                            <Image
-                              src={product.image}
-                              alt={product.name}
+                            <StrapiImage
+                              src={product.image.url}
+                              width={product.image.width}
+                              height={product.image.height}
+                              alt={product.image.alternativeText ?? product.name}
                               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                              priority={true}
                             />
                           </div>
                           <CardContent className="p-6">
@@ -90,20 +121,21 @@ const ProductCatalog = () => {
                               </p>
                             )}
                             <div className="flex flex-wrap gap-2">
-                              {product.tags.map((tag, index) => (
+                              {product.tags?.map((tag, index) => (
                                 <Badge
                                   key={index}
                                   variant="secondary"
                                   className="text-xs"
                                 >
-                                  {tag}
+                                  {tag.name}
                                 </Badge>
                               ))}
                             </div>
                           </CardContent>
                         </Card>
                       </Link>
-                    ))}
+                      )
+                    })}
                   </div>
                 ) : (
                   <div className="max-w-3xl mx-auto text-center">

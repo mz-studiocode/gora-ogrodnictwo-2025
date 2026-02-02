@@ -1,0 +1,416 @@
+{
+   "GET /api/home-page": {
+      "content-type": "api::home-page.home-page",
+      "populate": {
+         "blocks": {
+            "on": {
+               "blocks.contact-section": {
+                  "fields": [
+                     "title",
+                     "isServicesCheckboxEnabled"
+                  ],
+                  "populate": {
+                     "services": {
+                        "fields": [
+                           "isChecked",
+                           "name"
+                        ]
+                     },
+                     "gallery": {
+                        "fields": [
+                           "name",
+                           "alternativeText",
+                           "width",
+                           "height",
+                           "formats",
+                           "mime",
+                           "size",
+                           "url"
+                        ]
+                     }
+                  }
+               },
+               "blocks.service-section": {
+                  "fields": [
+                     "title",
+                     "description"
+                  ],
+                  "populate": {
+                     "services": {
+                        "fields": [
+                           "title",
+                           "description"
+                        ],
+                        "populate": {
+                           "slug": {
+                              "fields": [
+                                 "text",
+                                 "href",
+                                 "isExternal",
+                                 "theme"
+                              ]
+                           },
+                           "icon": {
+                              "fields": [
+                                 "name"
+                              ]
+                           }
+                        }
+                     }
+                  }
+               },
+               "blocks.about-section": {
+                  "fields": [
+                     "reversed",
+                     "headline",
+                     "content"
+                  ],
+                  "populate": {
+                     "image": {
+                        "fields": [
+                           "name",
+                           "alternativeText",
+                           "width",
+                           "height",
+                           "formats",
+                           "mime",
+                           "size",
+                           "url"
+                        ]
+                     }
+                  }
+               },
+               "blocks.hero-section": {
+                  "fields": [
+                     "heading",
+                     "description",
+                     "service"
+                  ],
+                  "populate": {
+                     "cta": {
+                        "fields": [
+                           "text",
+                           "href",
+                           "isExternal",
+                           "theme"
+                        ]
+                     },
+                     "phone": {
+                        "fields": [
+                           "text",
+                           "href",
+                           "isExternal",
+                           "theme"
+                        ]
+                     },
+                     "image": {
+                        "fields": [
+                           "name",
+                           "alternativeText",
+                           "width",
+                           "height",
+                           "formats",
+                           "mime",
+                           "size",
+                           "url"
+                        ]
+                     }
+                  }
+               }
+            }
+         }
+      }
+   },
+   "GET /api/offer-page": {
+      "content-type": "api::offer-page.offer-page",
+      "populate": {
+         "services": {
+            "fields": [
+               "title",
+               "description"
+            ],
+            "populate": {
+               "icon": {
+                  "fields": [
+                     "name"
+                  ]
+               },
+               "slug": {
+                  "fields": [
+                     "text",
+                     "href",
+                     "isExternal",
+                     "theme"
+                  ]
+               }
+            }
+         }
+      },
+      "fields": [
+         "title",
+         "description"
+      ]
+   },
+   "GET /api/services": {
+      "content-type": "api::service.service",
+      "fields": [
+         "title",
+         "description",
+         "longDescription",
+         "id"
+      ],
+      "populate": {
+         "icon": {
+            "fields": [
+               "name"
+            ]
+         },
+         "slug": {
+            "fields": [
+               "text",
+               "href",
+               "isExternal",
+               "theme"
+            ]
+         },
+         "image": {
+            "fields": [
+               "name",
+               "alternativeText",
+               "width",
+               "height",
+               "formats",
+               "ext",
+               "mime",
+               "size"
+            ]
+         },
+         "projects": {
+            "fields": [
+               "title",
+               "description",
+               "id"
+            ],
+            "populate": {
+               "image": {
+                  "fields": [
+                     "name",
+                     "alternativeText",
+                     "width",
+                     "height",
+                     "formats",
+                     "ext",
+                     "mime",
+                     "size",
+                     "url"
+                  ]
+               }
+            }
+         }
+      }
+   },
+   "GET /api/projects": {
+      "content-type": "api::project.project",
+      "fields": [
+         "title",
+         "description",
+         "id",
+         "documentId"
+      ],
+      "populate": {
+         "image": {
+            "fields": [
+               "name",
+               "alternativeText",
+               "width",
+               "height",
+               "formats",
+               "mime",
+               "size",
+               "url"
+            ]
+         },
+         "categories": {
+            "fields": [
+               "title",
+               "id"
+            ]
+         }
+      }
+   },
+   "GET /api/categories": {
+      "content-type": "api::category.category",
+      "fields": [
+         "title",
+         "id"
+      ]
+   },
+   "GET /api/projects/:id": {
+      "content-type": "api::project.project",
+      "fields": [
+         "title",
+         "description",
+         "id",
+         "location",
+         "year",
+         "longDescription"
+      ],
+      "populate": {
+         "image": {
+            "fields": [
+               "name",
+               "alternativeText",
+               "width",
+               "height",
+               "formats",
+               "size",
+               "url",
+               "mime",
+               "ext",
+               "id"
+            ]
+         },
+         "categories": {
+            "fields": [
+               "title",
+               "id"
+            ]
+         },
+         "galleryImages": {
+            "fields": [
+               "name",
+               "alternativeText",
+               "width",
+               "height",
+               "formats",
+               "ext",
+               "mime",
+               "size",
+               "url",
+               "id"
+            ]
+         }
+      }
+   },
+   "GET /api/strore-products": {
+      "content-type": "api::store-product.store-product",
+      "fields": [
+         "name",
+         "description",
+         "price",
+         "id"
+      ],
+      "populate": {
+         "category": {
+            "fields": [
+               "name",
+               "id"
+            ]
+         },
+         "image": {
+            "fields": [
+               "name",
+               "alternativeText",
+               "width",
+               "height",
+               "formats",
+               "ext",
+               "mime",
+               "size",
+               "url",
+               "id"
+            ]
+         },
+         "specifications": {
+            "fields": [
+               "label",
+               "value"
+            ]
+         },
+         "galleryImages": {
+            "fields": [
+               "name",
+               "alternativeText",
+               "width",
+               "height",
+               "formats",
+               "ext",
+               "mime",
+               "size",
+               "url",
+               "id"
+            ]
+         },
+         "tags": {
+            "fields": [
+               "name",
+               "id"
+            ]
+         }
+      }
+   },
+   "GET /api/strore-products/:id": {
+      "content-type": "api::store-product.store-product",
+      "fields": [
+         "name",
+         "description",
+         "price",
+         "id"
+      ],
+      "populate": {
+         "category": {
+            "fields": [
+               "name",
+               "id"
+            ]
+         },
+         "tags": {
+            "fields": [
+               "name",
+               "id"
+            ]
+         },
+         "image": {
+            "fields": [
+               "name",
+               "alternativeText",
+               "width",
+               "height",
+               "formats",
+               "ext",
+               "mime",
+               "size",
+               "url",
+               "id"
+            ]
+         },
+         "specifications": {
+            "fields": [
+               "label",
+               "value"
+            ]
+         },
+         "galleryImages": {
+            "fields": [
+               "name",
+               "alternativeText",
+               "width",
+               "height",
+               "formats",
+               "ext",
+               "mime",
+               "size",
+               "url",
+               "id"
+            ]
+         }
+      }
+   },
+   "GET /api/product-categories": {
+      "content-type": "api::product-category.product-category",
+      "fields": [
+         "name",
+         "id"
+      ]
+   }
+}

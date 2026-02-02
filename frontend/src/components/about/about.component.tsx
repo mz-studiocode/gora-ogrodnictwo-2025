@@ -1,48 +1,48 @@
-import aboutUsPhoto from "@/assets/images/about-us.jpg";
-import Image from "next/image";
+import { HOME_PAGE_COMPONENTS, HomePageData } from "@/types/home-page.types";
+import { StrapiImage } from "@/components/custom/strapi-image.component";
+import { useMemo } from "react";
+import { cn } from "@/lib/utils";
+import RichText from "../layout/rich-text.component";
 
-export const About = () => {
-  return (
-    <section className="py-16 md:py-24">
+export const About = ({ data }: { data: HomePageData }) => {
+  const aboutComponent = useMemo(() => {
+    return data.blocks.filter((block) => block.__component === HOME_PAGE_COMPONENTS.AboutSection) ?? [];
+  }, [data]);
+
+  if (aboutComponent.length === 0) return null;
+
+  return aboutComponent.map((component) => (
+    <section key={component.id} className="py-16 md:py-24">
       <div className="container mx-auto px-4">
         <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
           {/* Team Photo */}
-          <div className="relative">
+          <div className={cn("relative", component.reversed ? "order-2" : "order-1")}>
             <div className="rounded-xl overflow-hidden shadow-lg">
-              <Image
-                src={aboutUsPhoto}
-                alt="GreenSpace Design Team"
+              <StrapiImage
+                src={component.image.url}
+                alt={component.image.alternativeText ?? "About us image"}
+                width={component.image.width}
+                height={component.image.height}
                 className="w-full h-auto object-cover"
+                priority={true}
               />
             </div>
             <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-accent rounded-full opacity-20 blur-2xl" />
           </div>
 
           {/* Content */}
-          <div>
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-semibold text-primary mb-6">
-              Góra Ogrodnictwo
-            </h2>
-            <div className="space-y-4 text-foreground/80 leading-relaxed">
-              <p className="text-base md:text-lg">
-                Dzięki ponad 15-letniemu doświadczeniu w architekturze krajobrazu i projektowaniu ogrodów, 
-                przekształciliśmy setki przestrzeni zewnętrznych w całym regionie w zachwycające, 
-                zrównoważone środowiska.
-              </p>
-              <p className="text-base md:text-lg">
-                Nasz zespół pasjonatów projektantów, ogrodników i architektów krajobrazu 
-                ściśle współpracuje z każdym klientem, aby zrozumieć jego wizję i stworzyć przestrzenie, 
-                które poprawiają zarówno piękno, jak i funkcjonalność ich nieruchomości.
-              </p>
-              <p className="text-base md:text-lg">
-                Wierzymy w moc natury, by poprawić jakość życia, dlatego 
-                priorytetem są dla nas zrównoważone praktyki, rodzime nasadzenia i ekologiczne 
-                rozwiązania w każdym podejmowanym przez nas projekcie.
-              </p>
-            </div>
+          <div className={cn("order-1", component.reversed ? "text-right" : "text-left")}>
+            {component.headline && component.headline.length > 0 && (
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-semibold text-primary mb-6">
+                {component.headline}
+              </h2>
+            )}
+            {component.content && component.content.length > 0 && (
+              <RichText data={{ body: component.content }} />
+            )}
           </div>
         </div>
       </div>
     </section>
-  );
+  ));
 };

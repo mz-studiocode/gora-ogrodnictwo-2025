@@ -1,0 +1,17 @@
+{
+  "collectionName": "components_elements_checkboxes",
+  "info": {
+    "displayName": "Checkbox"
+  },
+  "options": {},
+  "attributes": {
+    "isChecked": {
+      "type": "boolean",
+      "default": false
+    },
+    "name": {
+      "type": "string"
+    }
+  },
+  "config": {}
+}

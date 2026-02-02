@@ -1,0 +1,39 @@
+{
+  "collectionName": "components_blocks_contact_sections",
+  "info": {
+    "displayName": "Contact Section"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "isServicesCheckboxEnabled": {
+      "type": "boolean"
+    },
+    "services": {
+      "type": "component",
+      "conditions": {
+        "visible": {
+          "==": [
+            {
+              "var": "isServicesCheckboxEnabled"
+            },
+            true
+          ]
+        }
+      },
+      "component": "elements.checkbox",
+      "repeatable": true
+    },
+    "gallery": {
+      "type": "media",
+      "multiple": true,
+      "allowedTypes": [
+        "images",
+        "files"
+      ]
+    }
+  },
+  "config": {}
+}
